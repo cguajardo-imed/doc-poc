@@ -1,0 +1,46 @@
+services:
+  # Go API - Externally exposed
+  api:
+    build:
+      context: api/
+      dockerfile: ../api.Dockerfile
+      network: host
+    container_name: api
+    ports:
+      - 8080:3000
+    environment:
+      - AI_URL=http://ollama:11434/v1
+      - AI_API_KEY=my-api-key
+
+  # ML Service for text summarization  
+  # ml:
+  #   build:
+  #     context: ml/
+  #     dockerfile: ../ml.Dockerfile
+  #     network: host
+  #   container_name: ml
+  #   ports:
+  #     - 8000:8000
+  #   volumes:
+  #     - ./hf_cache:/tmp/hf-home
+
+  ollama:
+    image: ollama/ollama:0.22.0
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - 11434:11434
+    volumes:
+      - ./ollama:/root/.ollama
+    environment:
+      - OLLAMA_MODEL=gemma4:e2b
+      - OLLAMA_PORT=11434
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_THREADS=1
+      - OLLAMA_TOKENIZER=ggml
+      - OLLAMA_NO_STREAM=true
+      - OLLAMA_CACHE=true
+      - OLLAMA_CACHE_DIR=/root/.ollama
+
+
+

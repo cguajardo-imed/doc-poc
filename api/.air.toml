@@ -1,0 +1,14 @@
+# Configuración de air para hot reload
+root = "."
+
+[build]
+cmd = "go build -o ./tmp/main.exe"
+entrypoint = "./tmp/main.exe"
+include_ext = [".go", ".html", ".css", ".js"]
+exclude_dir = ["assets", "hf_cache", "models", "ollama"]
+
+[log]
+level = "debug"
+
+[run]
+cmd = "./tmp/main"
