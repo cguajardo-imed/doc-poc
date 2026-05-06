@@ -37,11 +37,6 @@ const MODELS_BY_ENGINE = {
         { value: "gemma2:9b", label: "Gemma 2 9B" },
         { value: "llama3.1:8b", label: "Llama 3.1 8B" },
         { value: "gemma4:e2b", label: "Gemma 4 E2B" },
-        { value: "phi3:3.8b", label: "Phi 3.8B" },
-        // ------
-        { value: "deepseek-r1:1.5b", label: "Deepseek R1.5B" },
-        { value: "gemma3:4b-cloud", label: "Gemma 3 4B Cloud" },
-        { value: "qwen3.5:0.8b", label: "Qwen 3.5 0.8B" },
     ]
 };
 
