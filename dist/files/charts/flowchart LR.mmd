@@ -1,0 +1,46 @@
+flowchart LR
+    U[Usuario de negocio]
+
+    subgraph P1[1. Ingesta]
+        A[Carga documento PDF]
+    end
+
+    subgraph P2[2. Generacion de resumen]
+        B[Extraccion de texto y validaciones]
+        C{Documento ya procesado?}
+        D[Reutiliza resumen existente]
+        E[Genera resumen con LLM]
+    end
+
+    subgraph P3[3. Entrega de valor]
+        F[Resumen visible + metricas de uso]
+        G[ID de documento para seguimiento]
+    end
+
+    subgraph P4[4. Chat contextual]
+        H[Usuario consulta sobre el documento]
+        I[Se usa contexto del documento + historial]
+        J[Respuesta del asistente]
+    end
+
+    subgraph P5[5. Gobierno y trazabilidad]
+        K[(Base documental)]
+        L[(Historial de conversaciones)]
+    end
+
+    U --> A --> B --> C
+    C -- Si --> D --> F
+    C -- No --> E --> F
+    F --> G --> H --> I --> J
+    E --> K
+    D --> K
+    H --> L
+    J --> L
+
+    classDef negocio fill:#e8f4ff,stroke:#2b6cb0,color:#123b66;
+    classDef proceso fill:#eef9f0,stroke:#2f855a,color:#184d33;
+    classDef datos fill:#fff7e6,stroke:#b7791f,color:#5a3a09;
+
+    class U,F,G,H,J negocio;
+    class A,B,C,D,E,I proceso;
+    class K,L datos;
