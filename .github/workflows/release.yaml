@@ -92,7 +92,7 @@ jobs:
 
       - name: Commit and push dist
         run: |
-          git add dist/
+          git add -f dist/
           git commit -m "Update dist binaries for ${{ github.event_name == 'push' && github.ref_name || inputs.release_tag }}"
           git push
         env:
