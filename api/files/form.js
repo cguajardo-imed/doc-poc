@@ -34,9 +34,9 @@ const MODELS_BY_ENGINE = {
         { value: "cohere.command-r-plus-v1:0", label: "Cohere Command R+" }
     ],
     OLLAMA: [
-        { value: "gemma2:9b", label: "Gemma 2 9B" },
-        { value: "llama3.1:8b", label: "Llama 3.1 8B" },
         { value: "gemma4:e2b", label: "Gemma 4 E2B" },
+        { value: "qwen3:0.6b", label: "Qwen 3.0 6B" },
+        { value: "qwen2.5:1.5b", label: "Qwen 2.5 1.5B" },
     ]
 };
 
