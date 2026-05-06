@@ -1,0 +1,62 @@
+---
+config:
+  layout: dagre
+---
+flowchart LR
+ subgraph R1["Request 1: Generacion de resumen"]
+        S1["Sube PDF"]
+        S2["POST /api/summarize"]
+        S3["Extraccion de texto"]
+        S4["Hash del contenido"]
+        S5{"Hash existe en DB?"}
+        S6["Reutiliza resumen guardado"]
+        S7["Procesa con IA"]
+        S8["Guarda documento en DB"]
+        S9["Respuesta: summary + document_id"]
+  end
+ subgraph R2["Request 2: Chat sobre documento"]
+        C1["Usuario escribe pregunta"]
+        C2["POST /api/document-chat/:document_id"]
+        C3["Obtiene documento procesado por document_id"]
+        C4["Genera respuesta con contexto del documento"]
+        C5["Guarda intercambio en DB"]
+        C6["Respuesta de chat"]
+  end
+    U["Usuario"] --> S1 & C1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    S5 -- Si --> S6
+    S6 --> S9 & D[("DB documentos y chats")]
+    S5 -- No --> S7
+    S7 --> S8
+    S8 --> D
+    D --> S9 & C6
+    C1 --> C2
+    C2 --> C3
+    C3 --> D & C4
+    C4 --> C5
+    C5 --> D
+    S9 -. entrega document_id .-> C2
+    S4 --> S5
+
+     S1:::user
+     S2:::req
+     S3:::req
+     S4:::req
+     S5:::req
+     S6:::req
+     S7:::req
+     S8:::req
+     S9:::req
+     C1:::user
+     C2:::req
+     C3:::req
+     C4:::req
+     C5:::req
+     C6:::req
+     U:::user
+     D:::data
+    classDef user fill:#e8f4ff,stroke:#2b6cb0,color:#123b66
+    classDef req fill:#eef9f0,stroke:#2f855a,color:#184d33
+    classDef data fill:#fff7e6,stroke:#b7791f,color:#5a3a09
