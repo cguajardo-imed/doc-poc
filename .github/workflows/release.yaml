@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag to build binaries for'
+        required: true
+        default: 'v1.0.0'
 
 permissions:
   contents: write
@@ -51,7 +57,7 @@ jobs:
           GOARCH: ${{ matrix.goarch }}
           CGO_ENABLED: 0
         run: |
-          go build -trimpath -ldflags="-s -w -X main.Version=${{ github.ref_name }}" \
+          go build -trimpath -ldflags="-s -w -X main.Version=${{ github.event_name == 'push' && github.ref_name || inputs.release_tag }}" \
             -o ../dist/summarizer-api-${{ matrix.suffix }}${{ matrix.ext || '' }} \
             ./main.go
 
@@ -63,19 +69,39 @@ jobs:
           retention-days: 1
 
   release:
-    name: Create GitHub Release
+    name: Create GitHub Release & Update Dist
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
           path: dist
           merge-multiple: true
 
+      - name: Copy files directory
+        run: cp -r api/files dist/files
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push dist
+        run: |
+          git add dist/
+          git commit -m "Update dist binaries for ${{ github.event_name == 'push' && github.ref_name || inputs.release_tag }}"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create Release
+        if: github.event_name == 'push'
         uses: softprops/action-gh-release@v2
         with:
           name: Release ${{ github.ref_name }}
           generate_release_notes: true
-          files: dist/*
+          files: dist/summarizer-api-*
