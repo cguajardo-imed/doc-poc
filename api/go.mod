@@ -8,6 +8,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/bedrock v1.59.2
 	github.com/aws/aws-sdk-go-v2/service/bedrockruntime v1.50.6
 	github.com/gofiber/fiber/v3 v3.1.0
+	github.com/joho/godotenv v1.5.1
 	github.com/ledongthuc/pdf v0.0.0-20240201131950-da5b75280b06
 	github.com/ncruces/go-sqlite3 v0.34.0
 )
