@@ -15,9 +15,15 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/bedrockruntime"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	// Load environment variables from .env file
+	if err := godotenv.Load(); err != nil {
+		fmt.Println("Error loading .env file")
+	}
+
 	ctx := context.Background()
 	sdkConfig, err := config.LoadDefaultConfig(ctx, config.WithRegion(globals.REGION))
 	if err != nil {
@@ -49,6 +55,7 @@ func main() {
 	app.Post("/api/summarize", handlers.SummarizeHandler)
 	app.Post("/api/document-chat/:document_uuid", handlers.DocumentChatHandler)
 	app.Get("/api/health", handlers.HealthCheckHandler)
+	app.Delete("/api/db", handlers.ClearDBHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {

@@ -101,6 +101,16 @@ func (db *DB) Close() error {
 	return db.db.Close()
 }
 
+// Clear deletes all rows from documents and chats tables.
+func (db *DB) Clear() error {
+	_, err := db.db.Exec(`DELETE FROM chats`)
+	if err != nil {
+		return err
+	}
+	_, err = db.db.Exec(`DELETE FROM documents`)
+	return err
+}
+
 func generateUUID() string {
 	return uuid.New().String()
 }
