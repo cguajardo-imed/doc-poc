@@ -9,139 +9,180 @@
   <link rel="stylesheet" href="styles.css" />
   <script src="form.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js" defer></script>
+  <link rel="icon" type="image/png" href="favicon.png" />
 </head>
 
 <body>
-  <section id="intro" data-label="Intro">
+  <section id="intro" data-label="Intro" class="active">
     <h1>Document Summarizer PoC</h1>
-    <p>
-      Este proyecto es una prueba de concepto (PoC) para un resumidor
-      de documentos utilizando la API de OpenAI. El objetivo es
-      demostrar cómo se puede integrar la API para generar resúmenes
-      de texto de manera eficiente y precisa.
-    </p>
+    <div>
+      <p>
+        En esta prueba de concepto, comparamos dos alternativas para el resumen y consulta
+        de documentos: una con AWS Bedrock y una local con Ollama en una instancia EC2.
+      </p>
+      <p>
+        El objetivo es validar factibilidad técnica, calidad de resultados,
+        tiempos de respuesta y costos operacionales para una solución de
+        resumen asistido en español.
+      </p>
+      <h4>Qué vamos a ver en esta presentación</h4>
+      <ul>
+        <li>Comparativa de costos entre AWS Bedrock y despliegue local en EC2.</li>
+        <li>Demo funcional con carga de PDF, resumen automático y chat contextual.</li>
+      </ul>
+      <div style="display:flex;">
+        <img src="Abstract AI knowledg.png" style="height: 50vh;margin:auto;" />
+      </div>
+    </div>
+    </div>
   </section>
+
   <section id="costs-bedrock" data-label="Costos">
     <h1>Costos AWS Bedrock</h1>
-    <p>
-      El costo de utilizar la API de AWS Bedrock para resúmenes y explicación de
-      documentos depende del modelo que se utilice y la cantidad de
-      tokens procesados. A continuación, se detallan los costos
-      aproximados para diferentes modelos:
-    </p>
-    <table>
-      <thead>
-        <th>Modelo</th>
-        <th>Input (USD x 1M tokens)</th>
-        <th>Output (USD x 1M tokens)</th>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Claude Sonnet 4.6</td>
-          <td>$3,00</td>
-          <td>$15,00</td>
-        </tr>
-        <tr>
-          <td>Claude Haiku 4.5</td>
-          <td>$1,00</td>
-          <td>$5,00</td>
-        </tr>
-        <tr>
-          <td>Amazon Nova Pro</td>
-          <td>$0,80</td>
-          <td>$3,20</td>
-        </tr>
-        <tr>
-          <td>Cohere Command R+</td>
-          <td>$2,50</td>
-          <td>$10,00</td>
-        </tr>
-      </tbody>
-    </table>
-    <h4>Estimación</h4>
-    <p>Procesando 200 documentos diarios, cada uno de unos 18.000 a 20.000 tokens de entrada. Se asume que cada resumen
-      genera unos 2500 tokens de salida.</p>
-    <table>
-      <thead>
-        <th>Modelo</th>
-        <th>Costo mensual aprox.</th>
-        <th>Costo diario aprox.</th>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Amazon Nova Pro</td>
-          <td>$134</td>
-          <td>$4,5</td>
-        </tr>
-        <tr>
-          <td>Claude Haiku 4.5</td>
-          <td>$183</td>
-          <td>$6,1</td>
-        </tr>
-        <tr>
-          <td>Cohere Command R+</td>
-          <td>$420</td>
-          <td>$14</td>
-        </tr>
-        <tr>
-          <td>Claude Sonnet 4.6</td>
-          <td>$549</td>
-          <td>$18,3</td>
-        </tr>
-      </tbody>
-    </table>
+    <div>
+      <p>
+        El costo de utilizar la API de AWS Bedrock para resúmenes y explicación de
+        documentos depende del modelo que se utilice y la cantidad de
+        tokens procesados. A continuación, se detallan los costos
+        aproximados para diferentes modelos:
+      </p>
+      <table>
+        <thead>
+          <th>Modelo</th>
+          <th>Input (USD x 1M tokens)</th>
+          <th>Output (USD x 1M tokens)</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Claude Sonnet 4.6</td>
+            <td>$3,00</td>
+            <td>$15,00</td>
+          </tr>
+          <tr>
+            <td>Claude Haiku 4.5</td>
+            <td>$1,00</td>
+            <td>$5,00</td>
+          </tr>
+          <tr>
+            <td>Amazon Nova Pro</td>
+            <td>$0,80</td>
+            <td>$3,20</td>
+          </tr>
+          <tr>
+            <td>Cohere Command R+</td>
+            <td>$2,50</td>
+            <td>$10,00</td>
+          </tr>
+        </tbody>
+      </table>
+      <h4>Estimación</h4>
+      <p>Procesando 200 documentos diarios, cada uno de unos 18.000 a 20.000 tokens de entrada. Se asume que cada
+        resumen
+        genera unos 2500 tokens de salida.</p>
+      <table>
+        <thead>
+          <th>Modelo</th>
+          <th>Costo mensual aprox.</th>
+          <th>Costo diario aprox.</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Amazon Nova Pro</td>
+            <td>$134</td>
+            <td>$4,5</td>
+          </tr>
+          <tr>
+            <td>Claude Haiku 4.5</td>
+            <td>$183</td>
+            <td>$6,1</td>
+          </tr>
+          <tr>
+            <td>Cohere Command R+</td>
+            <td>$420</td>
+            <td>$14</td>
+          </tr>
+          <tr>
+            <td>Claude Sonnet 4.6</td>
+            <td>$549</td>
+            <td>$18,3</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </section>
-  <section id="costs-ec2" data-label="Costos" class="active">
+
+  <section id="costs-ec2" data-label="Costos">
     <h1>Costos Instancia EC2 con modelo local</h1>
-    <p>Procesando 200 documentos diarios, cada uno de unos 18.000 a 20.000 tokens de entrada. Se asume que cada resumen
-      genera unos 2500 tokens de salida.</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Instancia</th>
-          <th>Precio por hora</th>
-          <th>Costo diario (10 hr)</th>
-          <th>Costo mensual (30 d)</th>
-          <th>Ahorro con Spot</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>g4dn.xlarge</td>
-          <td>$0,526</td>
-          <td>$5,26</td>
-          <td>$157,8</td>
-          <td>~$71</td>
-        </tr>
-        <tr>
-          <td>g4dn.2xlarge</td>
-          <td>$0,752</td>
-          <td>$7,52</td>
-          <td>$225,6</td>
-          <td>~$86</td>
-        </tr>
-        <tr>
-          <td>g5.xlarge</td>
-          <td>$1,006</td>
-          <td>$10,06</td>
-          <td>$301,8</td>
-          <td>~$183</td>
-        </tr>
-      </tbody>
-    </table>
-    <p>Con <strong>Spot Instances</strong> la g4dn.xlarge puede bajar a aproximadamente <strong>$71</strong> al mes,
-      pero con el riesgo de que la quiten con 2 minutos de aviso.</p>
-    <img src="spot.png" />
-    <br />
-    <code style="margin-top: 1rem; font-size: small;">
+    <div>
+      <p>Procesando 200 documentos diarios, cada uno de unos 18.000 a 20.000 tokens de entrada. Se asume que cada
+        resumen
+        genera unos 2500 tokens de salida.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Instancia</th>
+            <th>Precio por hora</th>
+            <th>Costo diario (10 hr)</th>
+            <th>Costo mensual (30 d)</th>
+            <th>Ahorro con Spot</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>g4dn.xlarge</td>
+            <td>$0,526</td>
+            <td>$5,26</td>
+            <td>$157,8</td>
+            <td>~$71</td>
+          </tr>
+          <tr>
+            <td>g4dn.2xlarge</td>
+            <td>$0,752</td>
+            <td>$7,52</td>
+            <td>$225,6</td>
+            <td>~$86</td>
+          </tr>
+          <tr>
+            <td>g5.xlarge</td>
+            <td>$1,006</td>
+            <td>$10,06</td>
+            <td>$301,8</td>
+            <td>~$183</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Con <strong>Spot Instances</strong> la g4dn.xlarge puede bajar a aproximadamente <strong>$71</strong> al mes,
+        pero con el riesgo de que la quiten con 2 minutos de aviso.</p>
+      <img src="spot.png" />
+      <br />
+      <code style="margin-top: 1rem; font-size: small;">
         <ul>
             <li>https://aws.amazon.com/es/ec2/spot/pricing/</li>
             <li>https://aws.amazon.com/es/ec2/pricing/on-demand/</li>
         </ul>
     </code>
+    </div>
   </section>
-  <section id="demo-summary" data-label="Resúmenes" class="no-scroll" style="position: relative;">
-    <h1>Demo AWS Bedrock / Local [Resúmen de documentos]</h1>
+
+  <section id="flow" data-label="Flujo de trabajo">
+    <h1>Flujo de trabajo PoC</h1>
+    <div>
+      <p>El flujo de trabajo es el siguiente:</p>
+      <ol>
+        <li>El usuario carga un PDF con texto.</li>
+        <li>El usuario envía el PDF a la API.</li>
+        <li>La API extrae el texto del PDF.</li>
+        <li>La API llama a la API de LLM (Bedrock o ollama).</li>
+        <li>Bedrock/ollama procesa el texto y devuelve el resumen.</li>
+        <li>La API de LLM devuelve el resumen.</li>
+        <li>La API devuelve el resumen al usuario.</li>
+      </ol>
+      <img src="diagrama1.png" />
+    </div>
+  </section>
+
+  <section id="demo-summary" data-label="Demo" class="no-scroll" style="position: relative;">
+    <h1>Demo AWS Bedrock / Local [Resumen y chat de documentos]</h1>
     <div class="block-column">
       <div class="card">
         <form id="ia-form">
@@ -172,7 +213,7 @@
           </div>
         </form>
 
-        <details id="pdf-viewer-wrapper">
+        <details id="pdf-viewer-wrapper" open>
           <summary>Visor PDF</summary>
           <iframe id="pdf-viewer" title="Vista previa PDF"
             style="width:100%;height:420px;border:1px solid #ccc;"></iframe>
@@ -224,6 +265,7 @@
         </div>
         <small id="idle-text">Esperando envío...</small>
       </div>
+    </div>
   </section>
 
   <div class="nav">

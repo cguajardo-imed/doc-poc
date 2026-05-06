@@ -1,0 +1,69 @@
+flowchart TD
+    U[Usuario en UI]
+
+    subgraph FE[Frontend form.js]
+        F1[Selecciona PDF + engine + modelo]
+        F2[POST /api/summarize multipart/form-data]
+        F3[Guarda document_id en currentDocumentId]
+        F4[Renderiza resumen + tokens]
+        F5[Carga historial chat de localStorage por document_id]
+        F6[Usuario envía pregunta]
+        F7[Actualiza historial local: push user]
+        F8[POST /api/document-chat/:document_id con JSON historial]
+        F9[Renderiza respuesta asistente]
+        F10[Actualiza historial local: push assistant]
+    end
+
+    subgraph API[Fiber API]
+        A1[SummarizeHandler]
+        A2[parseSummaryRequest valida lee PDF y extrae texto]
+        A3[hash = SHA256 de model y text]
+        A4{Documento ya existe por hash?}
+        A5[Responde summary existente + document_id]
+        A6[Construye prompt de resumen]
+        A7[CallLLM tipo INVOKE]
+        A8[CreateDocument en SQLite]
+
+        C1[DocumentChatHandler]
+        C2[parseChatRequest valida JSON role/content]
+        C3[Obtiene ultimo userPrompt]
+        C4[GetDocumentByID]
+        C5[CallLLM tipo CHAT con ToMessages]
+        C6[CreateChat en SQLite]
+        C7[Responde message]
+    end
+
+    subgraph LLM[Capa LLM functions/llm.go]
+        L1{Engine}
+        L2[AWS + INVOKE -> Bedrock InvokeModel]
+        L3[AWS + CHAT -> Bedrock Converse]
+        L4[OLLAMA -> OpenAI compatible chat]
+    end
+
+    subgraph DB[SQLite]
+        D1[(documents)]
+        D2[(chats)]
+    end
+
+    U --> F1 --> F2 --> A1 --> A2 --> A3 --> A4
+    A4 -- Si --> A5 --> F3 --> F4 --> F5
+    A4 -- No --> A6 --> A7 --> L1
+    L1 --> L2
+    L1 --> L3
+    L1 --> L4
+    A7 --> A8 --> D1
+    A8 --> F3 --> F4 --> F5
+
+    U --> F6 --> F7 --> F8 --> C1 --> C2 --> C3 --> C4 --> D1
+    C4 --> C5 --> L1
+    C5 --> C6 --> D2 --> C7 --> F9 --> F10
+
+    classDef frontend fill:#e8f6fb,stroke:#2a6f97,color:#0b2b40;
+    classDef api fill:#eef7e8,stroke:#4f8a10,color:#1f3b08;
+    classDef llm fill:#fff4e6,stroke:#b26a00,color:#4a2a00;
+    classDef db fill:#f3e8ff,stroke:#7a3ea1,color:#2f1142;
+
+    class F1,F2,F3,F4,F5,F6,F7,F8,F9,F10 frontend;
+    class A1,A2,A3,A4,A5,A6,A7,A8,C1,C2,C3,C4,C5,C6,C7 api;
+    class L1,L2,L3,L4 llm;
+    class D1,D2 db;

@@ -135,7 +135,7 @@ func callBedrockChat(ctx context.Context, config LLMConfig, messages []types.Mes
 	}
 
 	fmt.Printf("Token Usage: \nInput: %v\nOutput: %v\nTotal: %v\n\n",
-		result.Usage.InputTokens, result.Usage.OutputTokens, result.Usage.TotalTokens)
+		&result.Usage.InputTokens, &result.Usage.OutputTokens, &result.Usage.TotalTokens)
 	output := parseBedrockOutput(result.Output)
 	return output, nil
 }

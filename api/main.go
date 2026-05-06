@@ -26,6 +26,7 @@ func main() {
 		return
 	}
 	globals.BedrockClient = bedrockruntime.NewFromConfig(sdkConfig)
+	globals.OLLAMA_URL = os.Getenv("OLLAMA_URL")
 
 	globals.DB = db.NewDB()
 	if globals.DB == nil {
